@@ -1,4 +1,5 @@
-﻿using BL.Interfaces;
+﻿using AutoMapper.Configuration;
+using BL.Interfaces;
 using BL.Repositories;
 using DataAccessLayer;
 using Microsoft.AspNetCore.Identity;
@@ -11,24 +12,38 @@ using System.Threading.Tasks;
 
 namespace BL.Bases
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
-        #region Common Properties
+        /*#region Common Properties
         private DbContext EC_DbContext { get; set; }
         #region Common Properties
         UserManager<ApplicationUserIdentity> manger;
         RoleManager<IdentityRole> role;
-        UnitOfWork(DbContext context, UserManager<ApplicationUserIdentity> userManager, RoleManager<IdentityRole> roleManager)
+        public UnitOfWork(DbContext context, UserManager<ApplicationUserIdentity> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.manger = userManager;
             this.role = roleManager;
             this.EC_DbContext = context;
+            EC_DbContext = new ApplicationDBContext();//
+            // Avoid load navigation properties
+            //EC_DbContext.Configuration.LazyLoadingEnabled = false;
         }
+        
+        #endregion*/
 
+        // #region Constructors
+        #region Common Properties
+        private DbContext EC_DbContext { get; set; }
+        // IConfiguration Configuration;
         #endregion
 
-       // #region Constructors
-
+        #region Constructors
+        public UnitOfWork()
+        {
+            EC_DbContext = new ApplicationDBContext();//
+            // Avoid load navigation properties
+            //EC_DbContext.Configuration.LazyLoadingEnabled = false;
+        }
         #endregion
 
         #region Methods
@@ -43,9 +58,17 @@ namespace BL.Bases
         }
         #endregion
 
+        public CategoryRepository category;//=> throw new NotImplementedException();
+        public CategoryRepository Category
 
-
-
+        {
+            get
+            {
+                if (category == null)
+                    category = new CategoryRepository(EC_DbContext);
+                return category;
+            }
+        }
         public OrderDetailsRepository orderDetails;//=> throw new NotImplementedException();
         public OrderDetailsRepository OrderDetails
         {
@@ -93,23 +116,24 @@ namespace BL.Bases
             }
         }
 
-        public BillingAddressRepository address;//=> throw new NotImplementedException();
-        public BillingAddressRepository Address
+        public BillingAddressRepository billingaddress;//=> throw new NotImplementedException();
+        public BillingAddressRepository BillingAddress
         {
             get
             {
-                if (address == null)
-                    address = new BillingAddressRepository(EC_DbContext);
-                return address;
+                if (billingaddress == null)
+                    billingaddress = new BillingAddressRepository(EC_DbContext);
+                return billingaddress;
             }
         }
         public AccountRepository accountt;//=> throw new NotImplementedException();
-        public AccountRepository account
+        public AccountRepository Account
         {
             get
             {
                 if (accountt == null)
-                    accountt = new AccountRepository(EC_DbContext, manger, role);
+                    accountt = new AccountRepository(EC_DbContext);
+                //accountt = new AccountRepository(EC_DbContext, manger, role);
                 return accountt;
             }
         }
@@ -143,17 +167,7 @@ namespace BL.Bases
                 return model;
             }
         }
-        public CategoryRepository category;//=> throw new NotImplementedException();
-        public CategoryRepository Category
 
-        {
-            get
-            {
-                if (category == null)
-                    category = new CategoryRepository(EC_DbContext);
-                return category;
-            }
-        }
         public OrderRepository order;//=> throw new NotImplementedException();
         public OrderRepository Order
         {
@@ -164,14 +178,14 @@ namespace BL.Bases
                 return order;
             }
         }
-        public SubCategoryRepository subCategory_Repository;//=> throw new NotImplementedException();
-        public SubCategoryRepository SubCategoryRepository
+        public SubCategoryRepository subCategory;//=> throw new NotImplementedException();
+        public SubCategoryRepository SubCategory
         {
             get
             {
-                if (subCategory_Repository == null)
-                    subCategory_Repository = new SubCategoryRepository(EC_DbContext);
-                return subCategory_Repository;
+                if (subCategory == null)
+                    subCategory = new SubCategoryRepository(EC_DbContext);
+                return subCategory;
             }
         }
         public ProductRepository product;//=> throw new NotImplementedException();
@@ -180,19 +194,11 @@ namespace BL.Bases
             get
             {
                 if (product == null)
-                   product= new ProductRepository(EC_DbContext);
+                    product = new ProductRepository(EC_DbContext);
                 return product;
             }
+
+
         }
-
-        //public ModelRepository Model => throw new NotImplementedException();
-
-        public BillingAddressRepository Wishlist => throw new NotImplementedException();
-
-        public OrderDetailsRepository OrderProduct => throw new NotImplementedException();
-
-        public RateRepository Review => throw new NotImplementedException();
-
-        public BillingAddressRepository BillingAddress => throw new NotImplementedException();
     }
 }

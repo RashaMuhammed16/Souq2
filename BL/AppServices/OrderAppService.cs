@@ -11,14 +11,9 @@ using BL.Interfaces;
 
 namespace BL.AppServices
 {
-    public class OrderAppService:AppServiceBase
-    {
-        public OrderAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
-        {
-
-        }
+    public class OrderAppService: BaseAppService
+    { 
         #region CURD
-
         public List<OrderViewModel> GetAllOrder()
         {
 

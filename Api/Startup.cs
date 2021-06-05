@@ -1,32 +1,71 @@
+using DataAccessLayer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Api
 {
     public class Startup
     {
+       
+        public IConfiguration Configuration { get; }
+        public bool ValidateIssuer { get; private set; }
+        public bool ValidateAudience { get; private set; }
+        public string ValidAudience { get; private set; }
+        public string ValidIssuer { get; private set; }
+        public SymmetricSecurityKey IssuerSigningKey { get; private set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+              // .AddEntityFrameworkStores<ApplicationDbContext>()
+              //.AddDefaultTokenProviders();
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                 opt.TokenLifespan = TimeSpan.FromHours(2));
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+               .AddJwtBearer(options =>
+               {
+                   options.SaveToken = true;
+                   options.RequireHttpsMetadata = false;
+                   options.TokenValidationParameters = new TokenValidationParameters();
+                   {
+                       ValidateIssuer = true;
+                       ValidateAudience = true;
+                       ValidAudience = Configuration["JWT:ValidAudience"];
+                       ValidIssuer = Configuration["JWT:ValidIssuer"];
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]));
+                   }
+
+               });
 
             services.AddControllers();
+            services.AddDbContext<ApplicationDBContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CS")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
@@ -46,7 +85,12 @@ namespace Api
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseCors(options => options
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials()
+                ); 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

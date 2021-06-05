@@ -11,12 +11,8 @@ using System.Threading.Tasks;
 
 namespace BL.AppServices
 {
-    public class RateAppService : AppServiceBase
+    public class RateAppService : BaseAppService
     {
-        public RateAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
-        {
-
-        }
         public RateViewModel SaveNewReview(Rate rate)
         {
 
