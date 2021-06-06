@@ -15,12 +15,12 @@ namespace BL.AppServices
     {
         #region CURD
 
-        public List<BillingAddressModelView> GetAllBrand()
+        public List<BillingAddressModelView> GetAllBillingAddress()
         {
 
             return Mapper.Map<List<BillingAddressModelView>>(TheUnitOfWork.BillingAddress.GetAllBillingAddress());
         }
-        public BillingAddressModelView GetBrand(int id)
+        public BillingAddressModelView GetBillingAddress(int id)
         {
             return Mapper.Map<BillingAddressModelView>(TheUnitOfWork.BillingAddress.GetById(id));
         }
@@ -58,7 +58,7 @@ namespace BL.AppServices
 
         public bool CheckBillingAddressExists(BillingAddressModelView billingAddressViewModel)
         {
-            var billingAddress  = Mapper.Map<BillingAddress>(billingAddressViewModel);
+            var billingAddress = Mapper.Map<BillingAddress>(billingAddressViewModel);
             return TheUnitOfWork.BillingAddress.CheckBillingAddressExists(billingAddress);
         }
         #endregion

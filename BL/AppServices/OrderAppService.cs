@@ -1,6 +1,9 @@
 ﻿using System;
 using AutoMapper;
 using System.Collections.Generic;
+using System;
+using AutoMapper;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +11,13 @@ using BL.Bases;
 using BL.ViewModel;
 using DataAccessLayer.Models;
 using BL.Interfaces;
-
 namespace BL.AppServices
 {
     public class OrderAppService: BaseAppService
-    { 
-        #region CURD
+    {
+       
+
+
         public List<OrderViewModel> GetAllOrder()
         {
 
@@ -47,7 +51,10 @@ namespace BL.AppServices
             return true;
         }
 
-
+        public int CountEntity()
+        {
+            return TheUnitOfWork.Order.CountEntity();
+        }
         public bool DeleteOrder(int id)
         {
             bool result = false;
@@ -63,8 +70,15 @@ namespace BL.AppServices
             Order order = Mapper.Map<Order>(orderViewModel);
             return TheUnitOfWork.Order.CheckOrderExists(order);
         }
-        #endregion
+        public int CountEntityForSpecficUser(string userID) => TheUnitOfWork.Order.CountEntityForSpeCifcUser(userID);
+        public IEnumerable<OrderViewModel> GetPageRecords(int pageSize, int pageNumber)
+        {
+            return Mapper.Map<List<OrderViewModel>>(TheUnitOfWork.Order.GetPageRecords(pageSize, pageNumber));
+        }
+        public IEnumerable<OrderViewModel> GetPageRecordsForSpeceficUser(string userID, int pageSize, int pageNumber)
+        {
+            return Mapper.Map<List<OrderViewModel>>(TheUnitOfWork.Order.GetPageRecordsForSpeceficUser(userID, pageSize, pageNumber));
+        }
 
     }
 }
-

@@ -10,6 +10,6 @@ namespace BL.ViewModel
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public string ModelName { get; set; }
+        //public string ModelName { get; set; }
     }
 }

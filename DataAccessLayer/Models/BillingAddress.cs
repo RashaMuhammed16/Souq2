@@ -11,6 +11,7 @@ namespace DataAccessLayer.Models
         public int ID { get; set; }
         public string street { get; set; }
         public string Phone { get; set; }
+        public string ShipperName { get; set; }
         public string ApplicationUserIdentity_Id { get; set; }
         public ApplicationUserIdentity appUser { get; set; }
         public List<Shipper> Shippers { get; set; } = new List<Shipper>();

@@ -16,7 +16,7 @@ namespace BL.AppServices
       
         #region CURD
 
-        public List<ModelViewModel> GetAllShipper()
+        public List<ModelViewModel> GetAllModels()
         {
 
             return Mapper.Map<List<ModelViewModel>>(TheUnitOfWork.Model.GetAllModel());

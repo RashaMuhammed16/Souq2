@@ -1,3 +1,6 @@
+using BL.AppServices;
+using BL.Bases;
+using BL.Interfaces;
 using DataAccessLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -62,7 +65,19 @@ namespace Api
                    }
 
                });
-
+            services.AddControllers(); services.AddIdentity<ApplicationUserIdentity, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<UserManager<ApplicationUserIdentity>>();
+            services.AddTransient<OrderDetailsAppService>();
+            services.AddTransient<PaymentAppService>();
+            services.AddTransient<ShipperAppService>();
+            services.AddTransient<BillingAddressAppService>();
+            services.AddTransient<ProductAppService>();
+            services.AddTransient<OrderAppService>();
+            services.AddTransient<ModelAppService>();
+            services.AddTransient<BrandAppService>();
+            services.AddHttpContextAccessor();//allow me to get user information such as id
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
             services.AddDbContext<ApplicationDBContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("CS")));
