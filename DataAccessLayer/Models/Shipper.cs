@@ -9,7 +9,7 @@ namespace DataAccessLayer.Models
 {
     public class Shipper
     {
-        public int ShipperID { get; set; }
+        public int ID { get; set; }
         public string ShipperMethod { get; set; }
         public string CompanyName { get; set; }
         public string PhoneNumber { get; set; }

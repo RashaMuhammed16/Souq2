@@ -41,7 +41,7 @@ namespace BL.AppServices
 
         }
 
-        public IEnumerable<ProductViewModel> GetProductsByCategoryIdPagination(int catId, int pageSize, int pageNumber)
+        public IEnumerable<ProductViewModel> GetProductsBySubCategoryIdPagination(int catId, int pageSize, int pageNumber)
         {
             pageSize = (pageSize <= 0) ? 10 : pageSize;
             pageNumber = (pageNumber < 1) ? 0 : pageNumber - 1;

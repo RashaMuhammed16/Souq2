@@ -43,10 +43,10 @@ namespace Api.Controllers
         {
             return Ok(_productAppService.GetRandomRelatedProducts(categoryId, numberOfProducts));
         }
-        [HttpGet("category/{catId}/{pageSize}/{pageNumber}")]
-        public IActionResult GetProductsByCategoryIdPagination(int catId, int pageSize, int pageNumber)
+        [HttpGet("subcategory/{subcatId}/{pageSize}/{pageNumber}")]
+        public IActionResult GetProductsBySubCategoryIdPagination(int catId, int pageSize, int pageNumber)
         {
-            return Ok(_productAppService.GetProductsByCategoryIdPagination(catId, pageSize, pageNumber));
+            return Ok(_productAppService.GetProductsBySubCategoryIdPagination(catId, pageSize, pageNumber));
         }
         
         [HttpGet("search/{searchKeyWord}")]
@@ -65,7 +65,7 @@ namespace Api.Controllers
             try
             {
                 _productAppService.SaveNewProduct(productViewModel);
-
+                
                 return Created("CreateProduct", productViewModel);
             }
             catch (Exception ex)

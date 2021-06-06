@@ -33,9 +33,11 @@ public class Product
     public double Discount { get; set; }
 
     public string Image { get; set; }
+        public string ColorName { get; set; }
+        public string SubCategoryName { get; set; }
+        public double? AverageRating { get; set; }
 
-
-    [Range(1, int.MaxValue, ErrorMessage = "Quantity Must be more than 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity Must be more than 1")]
     public int Quantity { get; set; }
 
     
@@ -43,7 +45,7 @@ public class Product
 
     [ForeignKey("Sub_Catogery")]
     public int Sub_CatogeryId { get; set; }
-    public Sub_Catogery Sub_Catogery { get; set; }
+    public virtual Sub_Catogery Sub_Catogery { get; set; }
 
 
         public List<Model>Models { get; set; } = new List<Model>();

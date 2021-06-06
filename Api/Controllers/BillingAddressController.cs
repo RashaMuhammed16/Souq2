@@ -37,23 +37,22 @@ namespace Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //try
-            //{
+            try
+            {
 
-            var resualt = _billingAppService.SaveNewBillingAddress(billingViewModel);
+                _billingAppService.SaveNewBillingAddress(billingViewModel);
 
             //string urlDetails = Url.Link("DefaultApi", new { id = categoryViewModel.ID });
             //return Created(urlDetails, "Added Sucess");
-            if (!resualt)
-                return BadRequest();
+            
             return Created("CreateBillingAddress", billingViewModel);
 
-            //}
-            //catch (Exception ex)
-            //{
-            //return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
 
-            //}
+            }
         }
         [HttpPut("{id}")]
         public IActionResult Edit(int id, BillingAddressModelView billingViewModel)

@@ -39,7 +39,7 @@ namespace BL.Repositories
 
         public bool CheckShipperExists(Shipper shipper)
         {
-            return GetAny(l => l.ShipperID == shipper.ShipperID);
+            return GetAny(l => l.ID == shipper.ID);
         }
         /*
         public Order GetOrderById(int id)

@@ -10,7 +10,7 @@ namespace BL.ViewModel
     public class ShipperViewModel
     {
    
-        public int ShipperID { get; set; }
+        public int ID { get; set; }
         [Required]
         public string ShipperMethod { get; set; }
         public string CompanyName { get; set; }

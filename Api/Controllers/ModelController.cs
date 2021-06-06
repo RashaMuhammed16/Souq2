@@ -37,23 +37,22 @@ namespace Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //try
-            //{
-            var resualt=  _modelAppService.SaveNewModel(modelViewModel);
+            try
+            {
+                _modelAppService.SaveNewModel(modelViewModel);
 
             //string urlDetails = Url.Link("DefaultApi", new { id = categoryViewModel.ID });
 
             //return Created(urlDetails, "Added Sucess");
-            if (!resualt)
-                return BadRequest();
+           
             
             return Created("CreateModel", modelViewModel);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
 
-            //}
+            }
         }
         [HttpPut("{id}")]
         public IActionResult Edit(int id, ModelViewModel modelViewModel)

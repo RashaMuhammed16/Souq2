@@ -30,10 +30,10 @@ namespace BL.ViewModel
 
         [Range(1, int.MaxValue, ErrorMessage = "Quantity Must be more than 1")]
         public int Quantity { get; set; }
-        public int CategoryId { get; set; }
-        public int ColorId { get; set; }
+        public int Sub_CatogeryId { get; set; }
+      
         public string ColorName { get; set; }
-        public string CategoryName { get; set; }
+        public string SubCategoryName { get; set; }
         public double? AverageRating { get; set; }
     }
 }
