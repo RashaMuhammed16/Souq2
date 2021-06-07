@@ -36,11 +36,14 @@ namespace BL.Bases
         private DbContext EC_DbContext { get; set; }
         // IConfiguration Configuration;
         #endregion
+     private RoleManager<IdentityRole> rolee;
 
         #region Constructors
-        public UnitOfWork()
+        public UnitOfWork(RoleManager<IdentityRole> roleManager)
         {
             EC_DbContext = new ApplicationDBContext();//
+            rolee = roleManager;
+            
             // Avoid load navigation properties
             //EC_DbContext.Configuration.LazyLoadingEnabled = false;
         }
@@ -199,6 +202,16 @@ namespace BL.Bases
             }
 
 
+        }
+        public RoleRepository role;
+        public RoleRepository Role
+        {
+            get
+            {
+                if (role == null)
+                    role = new RoleRepository(EC_DbContext,rolee);
+                return role;
+            }
         }
     }
 }

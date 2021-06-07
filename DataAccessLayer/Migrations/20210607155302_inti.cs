@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class souq : Migration
+    public partial class inti : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,7 +59,7 @@ namespace DataAccessLayer.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,6 +194,7 @@ namespace DataAccessLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     street = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShipperName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicationUserIdentity_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     appUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -231,8 +232,8 @@ namespace DataAccessLayer.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CatogeryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -280,7 +281,7 @@ namespace DataAccessLayer.Migrations
                 name: "Shippers",
                 columns: table => new
                 {
-                    ShipperID = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShipperMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -290,7 +291,7 @@ namespace DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Shippers", x => x.ShipperID);
+                    table.PrimaryKey("PK_Shippers", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Shippers_billingAddresses_BillingAddressId",
                         column: x => x.BillingAddressId,
@@ -310,6 +311,9 @@ namespace DataAccessLayer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Discount = table.Column<double>(type: "float", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ColorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AverageRating = table.Column<double>(type: "float", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Sub_CatogeryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -335,7 +339,7 @@ namespace DataAccessLayer.Migrations
                     Orderdate = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicationUserIdentity_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     appUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ShipoperIDShipperID = table.Column<int>(type: "int", nullable: true)
+                    ShipoperIDID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -347,10 +351,10 @@ namespace DataAccessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Orders_Shippers_ShipoperIDShipperID",
-                        column: x => x.ShipoperIDShipperID,
+                        name: "FK_Orders_Shippers_ShipoperIDID",
+                        column: x => x.ShipoperIDID,
                         principalTable: "Shippers",
-                        principalColumn: "ShipperID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -360,9 +364,11 @@ namespace DataAccessLayer.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -533,9 +539,9 @@ namespace DataAccessLayer.Migrations
                 column: "appUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ShipoperIDShipperID",
+                name: "IX_Orders_ShipoperIDID",
                 table: "Orders",
-                column: "ShipoperIDShipperID");
+                column: "ShipoperIDID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_ApplicationUserIdentity_Id",

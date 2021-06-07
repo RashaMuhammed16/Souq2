@@ -21,25 +21,7 @@ namespace Api.Controllers
             //categoryAppservice.SaveNewCategory(newCategory);
             return Ok(categoryAppservice.SaveNewCategory(newCategory));
         }
-        /*[HttpGet]
-        public ActionResult updateCategory(int id)
-        {
-
-            var Category = categoryAppservice.GetCategory(id);
-            return View(Category);
-        }
-        [HttpPost]
-        public ActionResult updateCategory(categoryViewModelcs updateCategory)
-        {
-            categoryAppservice.UpdateCategory(updateCategory);
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public ActionResult DeleteCategory(int id)
-        {
-          categoryAppservice.DeleteCategory(id);
-        }*/
+       
     }
 }
 

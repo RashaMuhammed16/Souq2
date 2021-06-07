@@ -28,6 +28,6 @@ namespace BL.Interfaces
         RateRepository Rate { get; }
         ShipperRepository Shipper { get; }
         BillingAddressRepository BillingAddress { get; }
-
+        RoleRepository Role { get; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BL.Configurations;
 using BL.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,13 @@ namespace BL.Bases
         #region Vars
         protected IUnitOfWork TheUnitOfWork { get; set; }
         protected readonly IMapper Mapper = MapperConfig.Mapper;
+      public  RoleManager<IdentityRole> roleManger;
         #endregion
 
         #region CTR
         public BaseAppService()
         {
-            TheUnitOfWork = new UnitOfWork();
+            TheUnitOfWork = new UnitOfWork(roleManger);
         }
 
         public void Dispose()
