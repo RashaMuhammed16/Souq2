@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BL.AppServices
 {
-    class Sub_CategortAppService: BaseAppService
+  public class Sub_CategortAppService: BaseAppService
     {
         public Sub_CategortAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
         {
