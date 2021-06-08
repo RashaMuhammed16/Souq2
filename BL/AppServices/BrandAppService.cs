@@ -13,7 +13,10 @@ namespace BL.AppServices
 {
    public class BrandAppService : BaseAppService
     {
+        public BrandAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
+        {
 
+        }
         #region CURD
 
         public List<BrandViewModel> GetAllBrand()

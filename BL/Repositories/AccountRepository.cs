@@ -15,17 +15,14 @@ namespace BL.Repositories
         private DbContext EC_DbContext;
         private readonly UserManager<ApplicationUserIdentity> manger;
         private RoleManager<IdentityRole> role;
-        //public AccountRepository(DbContext context,UserManager<ApplicationUserIdentity>usermanger,RoleManager<IdentityRole>role):base(context)
-        //  {
-        //      this.role = role;
-        //      this.manger = usermanger;
-        //      this.EC_DbContext = EC_DbContext;
-
-        //  }
-        public AccountRepository(DbContext EC_DbContext) : base(EC_DbContext)
+        public AccountRepository(DbContext context, UserManager<ApplicationUserIdentity> usermanger, RoleManager<IdentityRole> role) : base(context)
         {
+            this.role = role;
+            this.manger = usermanger;
             this.EC_DbContext = EC_DbContext;
+
         }
+
         public ApplicationUserIdentity GetAccountById(string id)
         {
            
@@ -37,7 +34,7 @@ namespace BL.Repositories
         }
         public async Task<ApplicationUserIdentity>GetByName(string UserName)
         {
-            var result = await manger.FindByNameAsync(UserName);
+            ApplicationUserIdentity result = await manger.FindByNameAsync(UserName);
             
             return result;
         }
@@ -51,14 +48,14 @@ namespace BL.Repositories
 
         {
             ApplicationUserIdentity user =await GetByName(UserName);
-            if (user != null && await manger.CheckPasswordAsync( user, Password))
+            if (user != null && await manger.CheckPasswordAsync(user, Password))
                 return  user;
             return null;
         }
         public async Task<IdentityResult>Register(ApplicationUserIdentity user)
         {
             user.Id = Guid.NewGuid().ToString();
-            var result = await manger.CreateAsync(user);
+            var result = await manger.CreateAsync(user,user.PasswordHash);
             return result;
         }
         public async Task<IdentityResult> AssignRole(string userName, string roleName)

@@ -15,10 +15,10 @@ namespace BL.AppServices
 {
     public class CategoryAppService: BaseAppService
     {
-        //public CategoryAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
-        //{
+        public CategoryAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
+        {
 
-        // }
+        }
 
         #region CURD
         public List<CategoryViewModel> GetAllCategory()

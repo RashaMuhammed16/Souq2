@@ -15,8 +15,11 @@ namespace BL.AppServices
 {
     public class OrderAppService: BaseAppService
     {
-       
 
+        public OrderAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
+        {
+
+        }
 
         public List<OrderViewModel> GetAllOrder()
         {

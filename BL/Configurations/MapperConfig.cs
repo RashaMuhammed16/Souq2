@@ -11,31 +11,41 @@ using DataAccessLayer;
 
 namespace BL.Configurations
 {
-    public static class MapperConfig
+    public class AutoMapperProfile : Profile
     {
-        public static IMapper Mapper { get; set; }
-        static MapperConfig()
+        public AutoMapperProfile()
         {
-            var config = new MapperConfiguration(
-                cfg =>
-                {
-                    cfg.CreateMap<Order, OrderViewModel>().ReverseMap();
-                    cfg.CreateMap<ApplicationUserIdentity, UserViewModel>().ReverseMap();
-                    cfg.CreateMap<OrderDetails, OrderDetailsViewModel>().ReverseMap();
-                    cfg.CreateMap<Shipper, ShipperViewModel>().ReverseMap();
-                    cfg.CreateMap<Category, CategoryViewModel>().ReverseMap();
-                    cfg.CreateMap<Product, ProductViewModel>().ReverseMap();
-                    cfg.CreateMap<Sub_Catogery, Sub_CategoryViewModel>().ReverseMap();
-                    cfg.CreateMap<ProductWishList, ProductWishListViewModel>().ReverseMap();
-                    cfg.CreateMap<Payment, PaymentViewModel>().ReverseMap();
-                    cfg.CreateMap<Brand, BrandViewModel>().ReverseMap();
-                    cfg.CreateMap<Model, ModelViewModel>().ReverseMap();
-                    cfg.CreateMap<BillingAddress,BillingAddressModelView>().ReverseMap();
-                    cfg.CreateMap<Rate, RateViewModel>().ReverseMap();
-                    //cfg.CreateMap<IdentityResult, ResultStatue>().ReverseMap();
+            CreateMap<Product, ProductViewModel>()
+                //.ForMember(vm => vm.ColorName, vm => vm.MapFrom(m => m.Color.Name))
+                //.ForMember(vm => vm.CategoryName, vm => vm.MapFrom(m => m.Category.Name))
+                .ReverseMap()
+               
+                .ForMember(m => m.Sub_Catogery, m => m.Ignore());
 
-                });
-            Mapper = config.CreateMapper();
+            CreateMap<Order, OrderViewModel>().ReverseMap();
+          
+
+            CreateMap<IdentityRole, RoleViewModel>().ReverseMap();
+            CreateMap<IdentityRole, RoleViewModel>().ReverseMap();
+            CreateMap<Rate, RateViewModel>().ReverseMap().ForMember(r => r.User, r => r.Ignore()).ForMember(r=>r.Product,r=>r.Ignore());
+                
+        
+
+           // CreateMap<ProductCart, ProductCartViewModel>().ReverseMap();
+            CreateMap<ProductWishList, ProductWishListViewModel>().ReverseMap();
+
+            CreateMap<Category, CategoryViewModel>().ReverseMap();
+            CreateMap<Sub_Catogery, Sub_CategoryViewModel>().ReverseMap();
+            CreateMap<Payment, PaymentViewModel>().ReverseMap();
+
+
+          //  CreateMap<Cart, CartViewModel>().ReverseMap();
+            CreateMap<Wishlist, WishlistViewModel>().ReverseMap();
+
+            CreateMap<ApplicationUserIdentity, LoginViewModel>().ReverseMap();
+            CreateMap<ApplicationUserIdentity, UserViewModel>().ReverseMap();
+
+          //  CreateMap<Color, ColorDTO>().ReverseMap();
         }
     }
 }

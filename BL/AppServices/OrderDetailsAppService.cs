@@ -14,9 +14,13 @@ namespace BL.AppServices
     
         public class OrderDetailsAppService : BaseAppService
     {
+        public OrderDetailsAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
+        {
 
-            #region CURD
-            public List<OrderDetailsViewModel> GetAllOrderDetails()
+        }
+
+        #region CURD
+        public List<OrderDetailsViewModel> GetAllOrderDetails()
             {
 
                 return Mapper.Map<List<OrderDetailsViewModel>>(TheUnitOfWork.OrderDetails.GetAllOrderDetails());

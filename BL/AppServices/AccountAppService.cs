@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿
 using AutoMapper.Configuration;
 using BL.Interfaces;
 using BL.ViewModel;
@@ -24,9 +24,12 @@ namespace BL.AppServices
     {
         //private readonly IConfiguration _Configration;
         IConfiguration configuration;
-        public AccountAppService(IConfiguration configurations)
+        WishlistAppService wishlistAppService;
+        public AccountAppService(IUnitOfWork theUnitOfWork, IConfiguration configurations,WishlistAppService wishlistAppService, AutoMapper.IMapper mapper):base(theUnitOfWork,mapper)
         {
           this.configuration = configurations;
+            this.wishlistAppService = wishlistAppService;
+            
         }
 
         public List<UserViewModel> GetAllAccounts()

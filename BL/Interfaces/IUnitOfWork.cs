@@ -29,5 +29,6 @@ namespace BL.Interfaces
         ShipperRepository Shipper { get; }
         BillingAddressRepository BillingAddress { get; }
         RoleRepository Role { get; }
+        WishlistRepository wishListRepository { get; }
     }
 }

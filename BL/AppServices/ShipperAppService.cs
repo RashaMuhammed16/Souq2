@@ -13,7 +13,11 @@ namespace BL.AppServices
 {
     public class ShipperAppService : BaseAppService
     {
-      
+        public ShipperAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
+        {
+
+        }
+
         #region CURD
         public List<ShipperViewModel> GetAllShipper()
         {

@@ -13,15 +13,90 @@ namespace Api.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        CategoryAppService categoryAppservice=new CategoryAppService();
+        CategoryAppService _categoryAppService;
+
+        public CategoryController(CategoryAppService categoryAppService)
+        {
+            this._categoryAppService = categoryAppService;
+        }
+        [HttpGet]
+        public IActionResult GetAllCategories()
+        {
+            return Ok(_categoryAppService.GetAllCategory());
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetCategoryById(int id)
+        {
+            return Ok(_categoryAppService.GetCategory(id));
+        }
 
         [HttpPost]
-        public async Task<IActionResult> PostCategory(CategoryViewModel newCategory)
+        public IActionResult Create(CategoryViewModel categoryViewModel)
         {
-            //categoryAppservice.SaveNewCategory(newCategory);
-            return Ok(categoryAppservice.SaveNewCategory(newCategory));
+
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _categoryAppService.SaveNewCategory(categoryViewModel);
+
+                //string urlDetails = Url.Link("DefaultApi", new { id = categoryViewModel.ID });
+                //return Created(urlDetails, "Added Sucess");
+                return Created("CreateCategory", categoryViewModel);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
         }
-       
+
+        [HttpPut("{id}")]
+        public IActionResult Edit(int id, CategoryViewModel categoryViewModel)
+        {
+
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _categoryAppService.UpdateCategory(categoryViewModel);
+                return Ok(categoryViewModel);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _categoryAppService.DeleteCategory(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //[HttpGet("count")]
+        //public IActionResult CategoriesCount()
+        //{
+        //    return Ok(_categoryAppService.count());
+        //}
+        //[HttpGet("{pageSize}/{pageNumber}")]
+        //public IActionResult GetCategoriesByPage(int pageSize, int pageNumber)
+        //{
+        //    return Ok(_categoryAppService.GetPageRecords(pageSize, pageNumber));
+        //}
+
     }
 }
 

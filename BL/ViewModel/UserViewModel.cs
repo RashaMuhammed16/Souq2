@@ -9,6 +9,7 @@ namespace BL.ViewModel
 {
     public class UserViewModel
     {
+
         public string Id { get; set; }
         [Display(Name = "User Name")]
         public string UserName { get; set; }
@@ -17,6 +18,15 @@ namespace BL.ViewModel
         [Required]
         [Display(Name = "Password")]
         public string PasswordHash { get; set; }
+
+        //[DataType(DataType.Password)]
+        //[Required]
+        //[Compare("PasswordHash")]
+        //[Display(Name = "Confirm Password")]
+        //public string ConfirmPassword { get; set; }
+
+
+
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
@@ -44,6 +54,8 @@ namespace BL.ViewModel
 
         [Required]
         public bool isDeleted { get; set; }
+
+        public string FullName { get; set; }
 
     }
 }

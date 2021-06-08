@@ -13,6 +13,10 @@ namespace BL.AppServices
 {
     class Sub_CategortAppService: BaseAppService
     {
+        public Sub_CategortAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
+        {
+
+        }
         public List<Sub_CategoryViewModel>GetAll()
         {
             return Mapper.Map<List<Sub_CategoryViewModel>>(TheUnitOfWork.SubCategory.GetAll());

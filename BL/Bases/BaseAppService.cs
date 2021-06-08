@@ -15,14 +15,18 @@ namespace BL.Bases
 
         #region Vars
         protected IUnitOfWork TheUnitOfWork { get; set; }
-        protected readonly IMapper Mapper = MapperConfig.Mapper;
+        protected readonly IMapper Mapper;
       public  RoleManager<IdentityRole> roleManger;
+        //protected IUnitOfWork TheUnitOfWork { get; set; }
+       // protected readonly IMapper Mapper; //MapperConfig.Mapper;
         #endregion
 
         #region CTR
-        public BaseAppService()
+        public BaseAppService(IUnitOfWork theUnitOfWork, IMapper mapper)
         {
-            TheUnitOfWork = new UnitOfWork(roleManger);
+            TheUnitOfWork = theUnitOfWork;
+            Mapper = mapper;
+
         }
 
         public void Dispose()

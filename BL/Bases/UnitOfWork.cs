@@ -14,6 +14,24 @@ namespace BL.Bases
 {
     public class UnitOfWork: IUnitOfWork
     {
+        private DbContext EC_DbContext { get; set; }
+        private UserManager<ApplicationUserIdentity> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
+
+
+
+
+        #region Constructors
+        public UnitOfWork(ApplicationDBContext EC_DbContextt, UserManager<ApplicationUserIdentity> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            this._userManager = userManager;
+            this._roleManager = roleManager;
+            this.EC_DbContext = EC_DbContextt;//
+
+
+            // Avoid load navigation properties
+            //EC_DbContext.Configuration.LazyLoadingEnabled = false;
+        }
         /*#region Common Properties
         private DbContext EC_DbContext { get; set; }
         #region Common Properties
@@ -25,28 +43,28 @@ namespace BL.Bases
             this.role = roleManager;
             this.EC_DbContext = context;
             EC_DbContext = new ApplicationDBContext();//
-            // Avoid load navigation properties
-            //EC_DbContext.Configuration.LazyLoadingEnabled = false;
+             Avoid load navigation properties
+            EC_DbContext.Configuration.LazyLoadingEnabled = false;
         }
         
         #endregion*/
 
-        // #region Constructors
-        #region Common Properties
-        private DbContext EC_DbContext { get; set; }
-        // IConfiguration Configuration;
-        #endregion
-     private RoleManager<IdentityRole> rolee;
+        //#region Constructors
+        //#region Common Properties
+        //private DbContext EC_DbContext { get; set; }
+        //IConfiguration Configuration;
+        //#endregion
+        //private RoleManager<IdentityRole> rolee;
 
-        #region Constructors
-        public UnitOfWork(RoleManager<IdentityRole> roleManager)
-        {
-            EC_DbContext = new ApplicationDBContext();//
-            rolee = roleManager;
-            
-            // Avoid load navigation properties
-            //EC_DbContext.Configuration.LazyLoadingEnabled = false;
-        }
+        //#region Constructors
+        //public UnitOfWork(RoleManager<IdentityRole> roleManager)
+        //{
+        //    EC_DbContext = new ApplicationDBContext();//
+        //    rolee = roleManager;
+
+        //    Avoid load navigation properties
+        //    EC_DbContext.Configuration.LazyLoadingEnabled = false;
+        //}
         #endregion
 
         #region Methods
@@ -135,7 +153,7 @@ namespace BL.Bases
             get
             {
                 if (accountt == null)
-                    accountt = new AccountRepository(EC_DbContext);
+                    accountt = new AccountRepository(EC_DbContext,_userManager,_roleManager);
                 //accountt = new AccountRepository(EC_DbContext, manger, role);
                 return accountt;
             }
@@ -148,6 +166,16 @@ namespace BL.Bases
                 if (brand == null)
                     brand = new BrandsRepository(EC_DbContext);
                 return brand;
+            }
+        }
+        public WishlistRepository wishListrepositoryy;
+        public WishlistRepository wishListRepository
+        {
+            get
+            {
+                if (wishListrepositoryy == null)
+                    wishListrepositoryy = new WishlistRepository(EC_DbContext);
+                return wishListrepositoryy;
             }
         }
         public RateRepository rate;//=> throw new NotImplementedException();
@@ -209,7 +237,7 @@ namespace BL.Bases
             get
             {
                 if (role == null)
-                    role = new RoleRepository(EC_DbContext,rolee);
+                    role = new RoleRepository(EC_DbContext,_roleManager);
                 return role;
             }
         }

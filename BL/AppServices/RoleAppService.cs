@@ -11,8 +11,12 @@ using System.Threading.Tasks;
 
 namespace BL.AppServices
 {
-    class RoleAppService : Bases.BaseAppService
+  public  class RoleAppService : Bases.BaseAppService
     {
+        public RoleAppService(IUnitOfWork theUnitOfWork, IMapper mapper) : base(theUnitOfWork, mapper)
+        {
+
+        }
 
         public async Task CreateRoles()
         {

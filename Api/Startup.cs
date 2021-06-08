@@ -5,17 +5,21 @@ using DataAccessLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,92 +28,129 @@ namespace Api
 {
     public class Startup
     {
-       
-        public IConfiguration Configuration { get; }
-        public bool ValidateIssuer { get; private set; }
-        public bool ValidateAudience { get; private set; }
-        public string ValidAudience { get; private set; }
-        public string ValidIssuer { get; private set; }
-        public SymmetricSecurityKey IssuerSigningKey { get; private set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-              // .AddEntityFrameworkStores<ApplicationDbContext>()
-              //.AddDefaultTokenProviders();
-            services.Configure<DataProtectionTokenProviderOptions>(opt =>
-                 opt.TokenLifespan = TimeSpan.FromHours(2));
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
+
+            services.AddControllers();
+            services.AddDbContext<ApplicationDBContext>(option => {
+                option.UseSqlServer(Configuration.GetConnectionString("CS"),
+                    options => options.EnableRetryOnFailure());
+            });
+            //services.AddTransient <,>
+            services.AddIdentity<ApplicationUserIdentity, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<UserManager<ApplicationUserIdentity>>();
+            services.AddTransient<RoleManager<IdentityRole>>();
+            services.AddTransient<AccountAppService>();
+          
+            services.AddTransient<CategoryAppService>();
+            services.AddTransient<OrderAppService>();
+
+           // services.AddTransient<OrderProductAppService>();
+            services.AddTransient<PaymentAppService>();
+            services.AddTransient<ProductAppService>();
+            services.AddTransient<OrderAppService>();
+            services.AddTransient<ProductWishListAppService>();
+            services.AddTransient<WishlistAppService>();
+            services.AddTransient<RateAppService>();
+            services.AddTransient<RoleAppService>();
+            services.AddTransient<ShipperAppService>();
+            services.AddTransient<WishlistAppService>();
+            services.AddTransient<OrderDetailsAppService>();
+          //  services.AddTransient<Sub_CategortAppService>();
+            services.AddTransient<ModelAppService>();
+            services.AddTransient<BrandAppService>();
+            services.AddHttpContextAccessor();//allow me to get user information such as id
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddSwaggerGen();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
             })
-               .AddJwtBearer(options =>
-               {
-                   options.SaveToken = true;
-                   options.RequireHttpsMetadata = false;
-                   options.TokenValidationParameters = new TokenValidationParameters();
-                   {
-                       ValidateIssuer = true;
-                       ValidateAudience = true;
-                       ValidAudience = Configuration["JWT:ValidAudience"];
-                       ValidIssuer = Configuration["JWT:ValidIssuer"];
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]));
-                   }
-
-               });
-            services.AddControllers(); services.AddIdentity<ApplicationUserIdentity, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<UserManager<ApplicationUserIdentity>>();
-            services.AddTransient<OrderDetailsAppService>();
-            services.AddTransient<PaymentAppService>();
-            services.AddTransient<ShipperAppService>();
-            services.AddTransient<BillingAddressAppService>();
-            services.AddTransient<ProductAppService>();
-            services.AddTransient<OrderAppService>();
-            services.AddTransient<ModelAppService>();
-            services.AddTransient<BrandAppService>();
-            services.AddHttpContextAccessor();//allow me to get user information such as id
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddControllers();
-            services.AddDbContext<ApplicationDBContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("CS")));
-            services.AddSwaggerGen(c =>
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
             });
+
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            RoleAppService roleAppService, AccountAppService accountAppService)
         {
+            //app.UseSwagger();
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
             }
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors(options => options
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .SetIsOriginAllowed(origin => true)
-            .AllowCredentials()
-                ); 
+            app.UseCors(
+                options => options
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
+            // make uploaded images stored in the Resources folder 
+            //  make Resources folder it servable as well
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            // create custom roles 
+            roleAppService.CreateRoles().Wait();
+            // add custom first admin
+            //accountAppService.CreateFirstAdmin().Wait();
         }
+
+
     }
 }
