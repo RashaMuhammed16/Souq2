@@ -58,9 +58,9 @@ namespace BL.Repositories
             var result = await manger.CreateAsync(user,user.PasswordHash);
             return result;
         }
-        public async Task<IdentityResult> AssignRole(string userName, string roleName)
+        public async Task<IdentityResult> AssignRole(string id, string roleName)
         {
-            var user = await GetByName(userName);
+            var user = await GetById(id);
             IdentityResult res;
             if (user != null && await role.RoleExistsAsync(roleName))
             {

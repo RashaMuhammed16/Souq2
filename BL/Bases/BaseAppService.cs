@@ -12,7 +12,7 @@ namespace BL.Bases
 {
     public class BaseAppService : IDisposable
     {
-
+       
         #region Vars
         protected IUnitOfWork TheUnitOfWork { get; set; }
         protected readonly IMapper Mapper;
