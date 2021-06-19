@@ -36,22 +36,34 @@ namespace BL.AppServices
             TheUnitOfWork.SubCategory.Update(sub_Catogery1);
             return TheUnitOfWork.Commit() > new int();
         }
-        public bool DeleteSubCategory(Sub_CategoryViewModel sub_Catogery)
+        public bool DeleteSubCategory(int id)
         {
-            TheUnitOfWork.SubCategory.Delete(Mapper.Map<Sub_Catogery>(sub_Catogery));
-            return TheUnitOfWork.Commit() > new int();
+            bool result = false;
+
+            TheUnitOfWork.SubCategory.Delete(id);
+            result = TheUnitOfWork.Commit() > new int();
+
+            return result;
         }
-       public bool SaveNewSubCategory(Sub_CategoryViewModel sub_CategoryViewModel)
+        public List<Sub_CategoryViewModel> GetAllsubCategoryWhere(int categoryID)
+        {
+            //    List<Product> products= TheUnitOfWork.Product.GetAllProduct().Where(p => p.Name.Contains(productToSearch)).ToList();
+            var subs = TheUnitOfWork.SubCategory.GetWhere(s => s.CatogeryId == categoryID);
+
+            return Mapper.Map<List<Sub_CategoryViewModel>>(subs);
+        }
+
+        public bool SaveNewSubCategory(Sub_CategoryViewModel sub_CategoryViewModel)
         {
             TheUnitOfWork.SubCategory.AddSubCategory(Mapper.Map<Sub_Catogery>(sub_CategoryViewModel))
 ;
             return TheUnitOfWork.Commit() > new int();
         }
 
-    
 
-        
 
-        
+
+
+
     }
 }

@@ -13,7 +13,7 @@ namespace DataAccessLayer.Models
         [Required]
         [MinLength(5)]
         public string Name  { get; set; }
-   
+        
         public List<Model> Models { get; set; } = new List<Model>();
     }
 }

@@ -72,6 +72,7 @@ namespace Api
           //  services.AddTransient<Sub_CategortAppService>();
             services.AddTransient<ModelAppService>();
             services.AddTransient<BrandAppService>();
+            services.AddTransient<Sub_CategortAppService>();
             services.AddHttpContextAccessor();//allow me to get user information such as id
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -23,6 +23,8 @@ namespace Api.Controllers
         [HttpGet]
         public IActionResult GetAllProducts()
         {
+            var products = _productAppService.GetAllProduct();
+            
             return Ok(_productAppService.GetAllProduct());
         }
         [HttpGet("{id}")]
@@ -62,17 +64,16 @@ namespace Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            try
-            {
+           
                 _productAppService.SaveNewProduct(productViewModel);
                 
                 return Created("CreateProduct", productViewModel);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+            
+            ////catch (Exception ex)
+            ////{
+            ////    return BadRequest(ex.Message);
 
-            }
+            ////}
         }
 
         [HttpPut("{id}")]

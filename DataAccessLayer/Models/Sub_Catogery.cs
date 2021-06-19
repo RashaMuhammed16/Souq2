@@ -20,6 +20,6 @@ namespace DataAccessLayer.Models
         [ForeignKey("Category")]
         public int CatogeryId { get; set; }
         public Category Category { get; set; }
-      //  public List<Product> Products { get; set; } = new List<Product>();
+        public List<Product> Products { get; set; } = new List<Product>();
     }
 }

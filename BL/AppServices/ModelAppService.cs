@@ -24,6 +24,14 @@ namespace BL.AppServices
 
             return Mapper.Map<List<ModelViewModel>>(TheUnitOfWork.Model.GetAllModel());
         }
+        public List<ModelViewModel> GetAllModelsWhere(int brandId)
+        {
+            //    List<Product> products= TheUnitOfWork.Product.GetAllProduct().Where(p => p.Name.Contains(productToSearch)).ToList();
+            var models = TheUnitOfWork.Model.GetWhere(m => m.BrandId == brandId);
+
+            return Mapper.Map<List<ModelViewModel>>(models);
+        }
+
         public ModelViewModel GetModel(int id)
         {
             return Mapper.Map<ModelViewModel>(TheUnitOfWork.Model.GetById(id));

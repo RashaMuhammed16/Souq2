@@ -15,5 +15,6 @@ namespace DataAccessLayer.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public List<Sub_Catogery> Sub_Catogery { get; set; } = new List<Sub_Catogery>();
+       
     }
 }

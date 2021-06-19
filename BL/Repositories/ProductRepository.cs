@@ -21,9 +21,9 @@ namespace BL.Repositories
 
         public IEnumerable<Product> GetAllProduct()
         {
-            return GetAll()
+            return GetAll().Include(p=>p.Sub_Catogery).Include(p=>p.Model)
                
-                .Include(p => p.Sub_Catogery)
+        
                 .Include(p => p.Rates)
                 .ToList();
         }
@@ -81,7 +81,7 @@ namespace BL.Repositories
                     
                     .Include(p => p.Sub_Catogery)
                     .Include(p => p.Rates)
-                    .Where(p => p.Sub_CatogeryId == categoryId)
+                    .Where(p => p.Sub_Catogery_Id == categoryId)
                     .OrderBy(p => Guid.NewGuid())
                     .Take(numberOfProducts);
             var x = query.ToQueryString();
@@ -106,7 +106,7 @@ namespace BL.Repositories
         {
             if (categoryId != 0)
             {
-                return DbSet.Where(p => p.Sub_CatogeryId == categoryId).Count();
+                return DbSet.Where(p => p.Sub_Catogery_Id == categoryId).Count();
             }
            
             return DbSet.Count();

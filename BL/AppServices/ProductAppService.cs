@@ -20,7 +20,8 @@ namespace BL.AppServices
         public IEnumerable<ProductViewModel> GetAllProduct()
         {
             IEnumerable<Product> allProducts = TheUnitOfWork.Product.GetAllProduct();
-            return Mapper.Map<IEnumerable<ProductViewModel>>(allProducts);
+            var products= Mapper.Map<IEnumerable<ProductViewModel>>(allProducts);
+                    return products;
         }
         public IEnumerable<ProductViewModel> GetNewArrivalsProduct(int numberOfProducts = 0)
         {
@@ -32,7 +33,7 @@ namespace BL.AppServices
         public List<ProductViewModel> GetAllProductWhere(int categoryID)
         {
                // List<Product> products= TheUnitOfWork.Product.GetAllProduct().Where(p => p.Name.Contains(productToSearch)).ToList();
-            var searchRes = TheUnitOfWork.Product.GetWhere(p => p.Sub_CatogeryId == categoryID);
+            var searchRes = TheUnitOfWork.Product.GetWhere(p => p.Sub_Catogery_Id == categoryID);
 
             return Mapper.Map<List<ProductViewModel>>(searchRes);
         }
@@ -49,7 +50,7 @@ namespace BL.AppServices
         {
             pageSize = (pageSize <= 0) ? 10 : pageSize;
             pageNumber = (pageNumber < 1) ? 0 : pageNumber - 1;
-            var products = TheUnitOfWork.Product.GetWhere(p => p.Sub_CatogeryId== catId)
+            var products = TheUnitOfWork.Product.GetWhere(p => p.Sub_Catogery_Id== catId)
                 .Skip(pageNumber * pageSize).Take(pageSize)
                 .ToList(); 
 

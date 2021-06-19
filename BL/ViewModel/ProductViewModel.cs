@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,10 +31,13 @@ namespace BL.ViewModel
 
         [Range(1, int.MaxValue, ErrorMessage = "Quantity Must be more than 1")]
         public int Quantity { get; set; }
-        public int Sub_CatogeryId { get; set; }
-      
-        public string ColorName { get; set; }
-        public string SubCategoryName { get; set; }
+        public int Sub_Catogery_Id { get; set; }
+
+
+        public int Model_Id { get; set; }
+        public string SubCatgoryName { get; set; }
+        public string ModelName { get; set; }
         public double? AverageRating { get; set; }
+       // public Sub_Catogery Sub_Catogery  { get; set; }
     }
 }

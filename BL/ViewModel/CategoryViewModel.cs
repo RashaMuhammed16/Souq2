@@ -6,8 +6,8 @@ namespace BL.ViewModel
 {
    public class CategoryViewModel
     {
-        [Required]
-        public int CategoryID{ get; set; }
+       
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }

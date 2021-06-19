@@ -20,7 +20,7 @@ namespace Api.Controllers
             this.sub_CategortAppService = sub_CategortAppService;
         }
         [HttpGet]
-        public IActionResult GetAllCategories()
+        public IActionResult GetAllSCategories()
         {
             return Ok(sub_CategortAppService.GetAll());
         }
@@ -29,7 +29,11 @@ namespace Api.Controllers
         {
             return Ok(sub_CategortAppService.GetById(id));
         }
-
+        [HttpGet("GetSubs/{id}")]
+        public IActionResult GetAllsubCategoryWhere(int id)
+        {
+            return Ok(sub_CategortAppService.GetAllsubCategoryWhere(id));
+        }
         [HttpPost]
         public IActionResult Create(Sub_CategoryViewModel subcategoryViewModel)
         {
@@ -75,10 +79,10 @@ namespace Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Sub_CategoryViewModel sub_CategoryViewModel = sub_CategortAppService.GetById(id);
+            
             try
             {
-                sub_CategortAppService.DeleteSubCategory(sub_CategoryViewModel);
+                sub_CategortAppService.DeleteSubCategory(id);
                 return NoContent();
             }
             catch (Exception ex)

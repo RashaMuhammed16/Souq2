@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class inti : Migration
+    public partial class mig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -227,6 +227,27 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Models",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BrandId = table.Column<int>(type: "int", nullable: false),
+                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Models", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Models_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sub_Catogeries",
                 columns: table => new
                 {
@@ -311,18 +332,22 @@ namespace DataAccessLayer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Discount = table.Column<double>(type: "float", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AverageRating = table.Column<double>(type: "float", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Sub_CatogeryId = table.Column<int>(type: "int", nullable: false)
+                    Sub_Catogery_Id = table.Column<int>(type: "int", nullable: false),
+                    Model_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Product_Sub_Catogeries_Sub_CatogeryId",
-                        column: x => x.Sub_CatogeryId,
+                        name: "FK_Product_Models_Model_Id",
+                        column: x => x.Model_Id,
+                        principalTable: "Models",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Product_Sub_Catogeries_Sub_Catogery_Id",
+                        column: x => x.Sub_Catogery_Id,
                         principalTable: "Sub_Catogeries",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -356,35 +381,6 @@ namespace DataAccessLayer.Migrations
                         principalTable: "Shippers",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Models",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BrandId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Models", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Models_Brands_BrandId",
-                        column: x => x.BrandId,
-                        principalTable: "Brands",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Models_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -519,11 +515,6 @@ namespace DataAccessLayer.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Models_ProductId",
-                table: "Models",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_orderID",
                 table: "OrderDetails",
                 column: "orderID");
@@ -554,9 +545,14 @@ namespace DataAccessLayer.Migrations
                 column: "BillingAddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_Sub_CatogeryId",
+                name: "IX_Product_Model_Id",
                 table: "Product",
-                column: "Sub_CatogeryId");
+                column: "Model_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_Sub_Catogery_Id",
+                table: "Product",
+                column: "Sub_Catogery_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductWishLists_productId",
@@ -607,9 +603,6 @@ namespace DataAccessLayer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Models");
-
-            migrationBuilder.DropTable(
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
@@ -625,9 +618,6 @@ namespace DataAccessLayer.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Brands");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
@@ -640,10 +630,16 @@ namespace DataAccessLayer.Migrations
                 name: "Shippers");
 
             migrationBuilder.DropTable(
+                name: "Models");
+
+            migrationBuilder.DropTable(
                 name: "Sub_Catogeries");
 
             migrationBuilder.DropTable(
                 name: "billingAddresses");
+
+            migrationBuilder.DropTable(
+                name: "Brands");
 
             migrationBuilder.DropTable(
                 name: "Category");

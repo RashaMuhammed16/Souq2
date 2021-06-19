@@ -16,12 +16,20 @@ namespace DataAccessLayer.Models
         public string Name { get; set; }
         [ForeignKey("Brand")]
         public int BrandId { get; set; }
-        public  Brand Brand { get; set; }
-        [ForeignKey("Product")]
-        public int ProductId { get; set; }
-        public  Product Product { get; set; }
-        public string ProductName { get; set; }
-        public string BrandName { get; set; }
+        public Brand Brand { get; set; }
+
+        public string BrandName
+        {
+           
+            get
+            {
+                if (this.Brand != null)
+                    return this.Brand.Name;
+                return "";
+
+            }
+        }
+        public List<Product> products { get; set; } = new List<Product>();
 
     }
 }

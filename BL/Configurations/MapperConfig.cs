@@ -35,16 +35,19 @@ namespace BL.Configurations
             CreateMap<ProductWishList, ProductWishListViewModel>().ReverseMap();
 
             CreateMap<Category, CategoryViewModel>().ReverseMap();
-            CreateMap<Sub_Catogery, Sub_CategoryViewModel>().ReverseMap();
+            CreateMap<Sub_Catogery, Sub_CategoryViewModel>().ReverseMap().ForMember(r => r.Category, r => r.Ignore())
+            ;
             CreateMap<Payment, PaymentViewModel>().ReverseMap();
+            CreateMap<Brand, BrandViewModel>().ReverseMap();
+            CreateMap<Model, ModelViewModel>().ReverseMap();
 
 
-          //  CreateMap<Cart, CartViewModel>().ReverseMap();
+            //  CreateMap<Cart, CartViewModel>().ReverseMap();
             CreateMap<Wishlist, WishlistViewModel>().ReverseMap();
 
             CreateMap<ApplicationUserIdentity, LoginViewModel>().ReverseMap();
             CreateMap<ApplicationUserIdentity, UserViewModel>().ReverseMap();
-
+          //  CreateMap<Sub_Catogery, Sub_CategoryViewModel>().ReverseMap().ForMember(s=>s.Category);
           //  CreateMap<Color, ColorDTO>().ReverseMap();
         }
     }

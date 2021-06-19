@@ -14,15 +14,25 @@ namespace Api.Controllers
     public class ModelController : ControllerBase
     {
        ModelAppService _modelAppService;
-        public ModelController(ModelAppService modelAppService)
+        BrandAppService BrandAppService;
+        public ModelController(ModelAppService modelAppService,BrandAppService brandAppService)
         {
             this._modelAppService = modelAppService;
+            this.BrandAppService = brandAppService;
 
+        }
+        [HttpGet("GetModels/{id}")]
+        public IActionResult GetAllsubCategoryWhere(int id)
+        {
+            return Ok(_modelAppService.GetAllModelsWhere(id));
         }
         [HttpGet]
         public IActionResult GetAllModels()
         {
-            return Ok(_modelAppService.GetAllModels());
+            var models = _modelAppService.GetAllModels();
+            foreach (var model in models)
+                model.BrandName = BrandAppService.GetBrand(model.BrandId).Name;
+           return Ok(models);
         }
         [HttpGet("{id}")]
         public IActionResult GetModelById(int id)

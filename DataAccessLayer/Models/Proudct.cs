@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Models
 {
-    
-
-[Table("Product")]
-public class Product
-{
+    [Table("Product")]
+  public class Product 
+    { 
 
     public int ID { get; set; }
     [Required]
@@ -33,25 +31,50 @@ public class Product
     public double Discount { get; set; }
 
     public string Image { get; set; }
-        public string ColorName { get; set; }
-        public string SubCategoryName { get; set; }
-        public double? AverageRating { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity Must be more than 1")]
+
+    [Range(1, int.MaxValue, ErrorMessage = "Quantity Must be more than 1")]
     public int Quantity { get; set; }
 
-    
+    [NotMapped]
+    public double? AverageRating
+    {
+        get
+        {
+            if (Rates.Count != 0)
+                return Rates.Select(r => r.Rating).Average();
+            return 0;
+        }
+    }
+        public string SubCatgoryName { get
+            {
+                if (this.Sub_Catogery != null)
+                return this.Sub_Catogery.Name;
+                return "";
 
+            }
+        }
+        public string ModelName
+        {
+            get
+            {
+                if (this.Model != null)
+                    return this.Model.Name;
+                return "";
 
-    [ForeignKey("Sub_Catogery")]
-    public int Sub_CatogeryId { get; set; }
-    public virtual Sub_Catogery Sub_Catogery { get; set; }
+            }
+        }
 
+        [ForeignKey("Sub_Catogery")]
+        public int Sub_Catogery_Id { get; set; }
+        public Sub_Catogery Sub_Catogery { get; set; }
+        [ForeignKey("Model")]
+        public int Model_Id { get; set; }
+        public Model Model { get; set; }
 
-        public List<Model>Models { get; set; } = new List<Model>();
         public List<ProductWishList> Wishlists { get; set; } = new List<ProductWishList>();
 
-        public List<OrderDetails> orderDetail { get; set; } = new List<OrderDetails>();
+    public List<OrderDetails> OrderProducts { get; set; } = new List<OrderDetails>();
     public List<Rate> Rates { get; set; } = new List<Rate>();
 
 

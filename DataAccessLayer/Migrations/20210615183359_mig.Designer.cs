@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210607155302_inti")]
-    partial class inti
+    [Migration("20210615183359_mig")]
+    partial class mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -187,17 +187,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ID");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Models");
                 });
@@ -310,12 +302,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double?>("AverageRating")
-                        .HasColumnType("float");
-
-                    b.Property<string>("ColorName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -325,6 +311,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Model_Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -336,15 +325,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("SubCategoryName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Sub_CatogeryId")
+                    b.Property<int>("Sub_Catogery_Id")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("Sub_CatogeryId");
+                    b.HasIndex("Model_Id");
+
+                    b.HasIndex("Sub_Catogery_Id");
 
                     b.ToTable("Product");
                 });
@@ -611,15 +599,7 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataAccessLayer.Models.Product", "Product")
-                        .WithMany("Models")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Brand");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Order", b =>
@@ -640,7 +620,7 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.OrderDetails", b =>
                 {
                     b.HasOne("DataAccessLayer.Models.Product", "Product")
-                        .WithMany("orderDetail")
+                        .WithMany("OrderProducts")
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -675,11 +655,19 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Product", b =>
                 {
-                    b.HasOne("DataAccessLayer.Models.Sub_Catogery", "Sub_Catogery")
-                        .WithMany()
-                        .HasForeignKey("Sub_CatogeryId")
+                    b.HasOne("DataAccessLayer.Models.Model", "Model")
+                        .WithMany("products")
+                        .HasForeignKey("Model_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DataAccessLayer.Models.Sub_Catogery", "Sub_Catogery")
+                        .WithMany("Products")
+                        .HasForeignKey("Sub_Catogery_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Model");
 
                     b.Navigation("Sub_Catogery");
                 });
@@ -819,6 +807,11 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Sub_Catogery");
                 });
 
+            modelBuilder.Entity("DataAccessLayer.Models.Model", b =>
+                {
+                    b.Navigation("products");
+                });
+
             modelBuilder.Entity("DataAccessLayer.Models.Order", b =>
                 {
                     b.Navigation("orderDetails");
@@ -826,13 +819,16 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Product", b =>
                 {
-                    b.Navigation("Models");
-
-                    b.Navigation("orderDetail");
+                    b.Navigation("OrderProducts");
 
                     b.Navigation("Rates");
 
                     b.Navigation("Wishlists");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.Sub_Catogery", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Wishlist", b =>

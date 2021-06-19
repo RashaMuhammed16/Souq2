@@ -20,9 +20,14 @@ namespace BL.Repositories
         {
             Insert(sub_Category);
         }
+        public IQueryable<Sub_Catogery> GetWheree(System.Linq.Expressions.Expression<Func<Sub_Catogery, bool>> filter = null, string includeProperties = "")
+        {
+            return GetWhere(filter);
+        }
+
         public IEnumerable<Sub_Catogery>GetAllSubCategory()
         {
-            return GetAll();
+            return GetAll().Include(s=>s.Category).ToList();
         }
         public bool CheckSubCategoryExists(Sub_Catogery sub_Catogery)
         {
@@ -41,7 +46,7 @@ namespace BL.Repositories
             Delete(sub_Catogery);
         }
 
-
+       
 
     }
 }

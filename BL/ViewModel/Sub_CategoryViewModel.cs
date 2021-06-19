@@ -13,9 +13,9 @@ namespace BL.ViewModel
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [ForeignKey("Category")]
+        
         public int CatogeryId { get; set; }
-        public Category Category { get; set; }
+       // public Category Category { get; set; }
         //  public List<Product> Products { get; set; } = new List<Product>();
     }
 }
