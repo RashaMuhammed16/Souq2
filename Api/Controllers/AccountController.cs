@@ -64,6 +64,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("/Register")]
+       // [HttpOptions]
         public async Task<IActionResult> RegisterUser([FromBody] UserViewModel model)
         {
 
@@ -81,20 +82,20 @@ namespace Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new Response { Status = "Error", Message = result.Errors.FirstOrDefault().Description });
 
-            ApplicationUserIdentity identityUser = await _accountAppService.Find(model.UserName, model.PasswordHash);
+            ApplicationUserIdentity identityUser = await _accountAppService.Find(model.Email, model.PasswordHash);
             #region oldCreateCartWishlist
-            ////create cart for new user
-            //CartViewModel cartViewModel = new CartViewModel() { ApplicationUserIdentity_Id = identityUser.Id };
-            //_cartAppService.SaveNewCart(cartViewModel);
+            ////////create cart for new user
+            //////CartViewModel cartViewModel = new CartViewModel() { ApplicationUserIdentity_Id = identityUser.Id };
+            //////_cartAppService.SaveNewCart(cartViewModel);
 
-            //WishlistViewModel wishlistViewModel = new WishlistViewModel() { ApplicationUserIdentity_Id = identityUser.Id };
-            //_wishlistAppService.SaveNewWishlist(wishlistViewModel);
+            //////WishlistViewModel wishlistViewModel = new WishlistViewModel() { ApplicationUserIdentity_Id = identityUser.Id };
+            //////_wishlistAppService.SaveNewWishlist(wishlistViewModel);
             #endregion
-            //create roles
-            //await _roleAppService.CreateRoles();
+            //////create roles
+             // await _roleAppService.CreateRoles();
             await _accountAppService.AssignRole(identityUser.Id, roleName);
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
-
+            //return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return Ok(identityUser);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(string id, UserViewModel registerViewodel)
@@ -111,7 +112,7 @@ namespace Api.Controllers
         [HttpPost("/Login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            var user = await _accountAppService.Find(model.UserName, model.PasswordHash);
+            var user = await _accountAppService.Find(model.Email, model.PasswordHash);
             if (user != null)
             {
                 dynamic token = await _accountAppService.CreateToken(user);
@@ -145,5 +146,12 @@ namespace Api.Controllers
         //{
         //    return Ok(_accountAppService.GetPageRecords(pageSize, pageNumber));
         //}
+      //public async Task<IActionResult> GetUser(string email,string password)
+      //  {
+      //      var user= await _accountAppService.Find(email,password)
+            
+      // }
+
     }
+   
 }

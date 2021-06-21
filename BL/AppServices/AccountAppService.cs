@@ -17,6 +17,7 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using BL.Bases;
 using Microsoft.AspNetCore.Http;
 using Velites.Utility.SharedLibrary;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BL.AppServices
 {
@@ -49,16 +50,16 @@ namespace BL.AppServices
             TheUnitOfWork.Account.Update(user);
             return TheUnitOfWork.Commit() > new int();
         }
-        public async Task<ApplicationUserIdentity> Find(string name, string Password)
+        public async Task<ApplicationUserIdentity> Find(string Email, string Password)
         {
-            ApplicationUserIdentity user = await TheUnitOfWork.Account.Find(name, Password);
+            ApplicationUserIdentity user = await TheUnitOfWork.Account.Find(Email, Password);
             if (user != null && user.isDeleted == false)
                 return user;
             return null;
         }
-        public async Task<ApplicationUserIdentity> FindByName(string userName)
+        public async Task<ApplicationUserIdentity> FindByEmail(string Email)
         {
-            ApplicationUserIdentity user = await TheUnitOfWork.Account.GetByName(userName);
+            ApplicationUserIdentity user = await TheUnitOfWork.Account.GetByEmail(Email);
 
             if (user != null && user.isDeleted == false)
                 return user;
@@ -70,9 +71,9 @@ namespace BL.AppServices
             throw new NotImplementedException();
         }
 
-        public async Task<bool> checkUserNameExist(string userName)
+        public async Task<bool> checkUserEmailExist(string Email)
         {
-            var user = await TheUnitOfWork.Account.GetByName(userName);
+            var user = await TheUnitOfWork.Account.GetByEmail(Email);
             return user == null ? false : true;
         }
         public async Task<IdentityResult> AssignRole(string userid, string rolename)
@@ -151,10 +152,10 @@ namespace BL.AppServices
         }
         public async Task<IdentityResult> Register(UserViewModel user)
         {
-            bool isExist = await checkUserNameExist(user.UserName);
+            bool isExist = await checkUserEmailExist(user.Email);
             if (isExist)
-                return IdentityResult.Failed(new IdentityError
-                { Code = "error", Description = "user name already exist" });
+            return IdentityResult.Failed(new IdentityError
+                    { Code = "error", Description = "user name already exist" });
 
             ApplicationUserIdentity identityUser = Mapper.Map<UserViewModel, ApplicationUserIdentity>(user);
             var result = await TheUnitOfWork.Account.Register(identityUser);

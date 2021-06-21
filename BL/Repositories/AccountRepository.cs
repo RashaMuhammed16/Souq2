@@ -32,10 +32,11 @@ namespace BL.Repositories
         {
             return GetAll().ToList();
         }
-        public async Task<ApplicationUserIdentity>GetByName(string UserName)
+
+        public async Task<ApplicationUserIdentity> GetByEmail(string Email)
         {
-            ApplicationUserIdentity result = await manger.FindByNameAsync(UserName);
-            
+            ApplicationUserIdentity result = await manger.FindByEmailAsync(Email);
+
             return result;
         }
         public async Task<ApplicationUserIdentity> GetById(string id)
@@ -44,15 +45,15 @@ namespace BL.Repositories
 
             return result;
         }
-        public async Task<ApplicationUserIdentity>Find(string UserName,string Password)
+        public async Task<ApplicationUserIdentity>Find(string Email, string Password)
 
         {
-            ApplicationUserIdentity user =await GetByName(UserName);
+            ApplicationUserIdentity user =await GetByEmail(Email);
             if (user != null && await manger.CheckPasswordAsync(user, Password))
                 return  user;
             return null;
         }
-        public async Task<IdentityResult>Register(ApplicationUserIdentity user)
+        public async Task<IdentityResult> Register(ApplicationUserIdentity user)
         {
             user.Id = Guid.NewGuid().ToString();
             var result = await manger.CreateAsync(user,user.PasswordHash);
