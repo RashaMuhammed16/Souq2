@@ -95,7 +95,7 @@ namespace Api.Controllers
              // await _roleAppService.CreateRoles();
             await _accountAppService.AssignRole(identityUser.Id, roleName);
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
-            
+
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(string id, UserViewModel registerViewodel)
