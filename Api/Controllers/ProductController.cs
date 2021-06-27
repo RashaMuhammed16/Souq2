@@ -1,5 +1,6 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -57,6 +58,7 @@ namespace Api.Controllers
             return Ok(_productAppService.GetProductsBySearch(searchKeyWord));
         }
         [HttpPost]
+
         public IActionResult Create(ProductViewModel productViewModel)
         {
 
@@ -77,6 +79,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
+      
         public IActionResult Edit(int id, ProductViewModel productViewModel)
         {
 
@@ -96,6 +99,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("{id}")]
+      
         public IActionResult Delete(int id)
         {
             try

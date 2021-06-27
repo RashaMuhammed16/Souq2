@@ -1,6 +1,7 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
 using DataAccessLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,6 +36,7 @@ namespace Api.Controllers
             this._httpContextAccessor = httpContextAccessor;
         }
         [HttpGet]
+      
         public IActionResult GetAll()
         {
             var res = _accountAppService.GetAllAccounts();
@@ -88,8 +90,8 @@ namespace Api.Controllers
             //////CartViewModel cartViewModel = new CartViewModel() { ApplicationUserIdentity_Id = identityUser.Id };
             //////_cartAppService.SaveNewCart(cartViewModel);
 
-            //////WishlistViewModel wishlistViewModel = new WishlistViewModel() { ApplicationUserIdentity_Id = identityUser.Id };
-            //////_wishlistAppService.SaveNewWishlist(wishlistViewModel);
+           WishlistViewModel wishlistViewModel = new WishlistViewModel() { ID= identityUser.Id };
+            _wishlistAppService.SaveNewWishlist(wishlistViewModel);
             #endregion
             //////create roles
              // await _roleAppService.CreateRoles();

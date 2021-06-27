@@ -1,23 +1,28 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BillingAddressController : ControllerBase
     {
-        BillingAddressAppService _billingAppService;
-        public BillingAddressController(BillingAddressAppService billingAppService)
+        private IHttpContextAccessor _httpContextAccessor;
+        private BillingAddressAppService _billingAppService;
+        public BillingAddressController(BillingAddressAppService billingAppService, IHttpContextAccessor httpContextAccessor)
         {
-            this._billingAppService = billingAppService;
-            ;
+            _billingAppService = billingAppService;
+            _httpContextAccessor = httpContextAccessor;
+
         }
         [HttpGet]
         public IActionResult GetAllBillingAddress()
@@ -29,10 +34,14 @@ namespace Api.Controllers
         {
             return Ok(_billingAppService.GetBillingAddress(id));
         }
+
         [HttpPost]
         public IActionResult Create(BillingAddressModelView billingViewModel)
         {
-
+            var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+              billingViewModel.ApplicationUserIdentity_Id = userID;
+          
+            var billingAddress = _billingAppService.GetAllBillingAddress();
             if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
@@ -42,10 +51,12 @@ namespace Api.Controllers
 
                 _billingAppService.SaveNewBillingAddress(billingViewModel);
 
-            //string urlDetails = Url.Link("DefaultApi", new { id = categoryViewModel.ID });
-            //return Created(urlDetails, "Added Sucess");
-            
-            return Created("CreateBillingAddress", billingViewModel);
+                //if (!t)
+                //    return BadRequest();
+                //string urlDetails = Url.Link("DefaultApi", new { id = categoryViewModel.ID });
+                //return Created(urlDetails, "Added Sucess");
+
+                return Created("CreateBillingAddress", billingViewModel);
 
             }
             catch (Exception ex)
@@ -90,3 +101,4 @@ namespace Api.Controllers
 
     }
 }
+   

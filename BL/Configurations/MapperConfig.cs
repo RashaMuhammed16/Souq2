@@ -40,7 +40,7 @@ namespace BL.Configurations
             CreateMap<Payment, PaymentViewModel>().ReverseMap();
             CreateMap<Brand, BrandViewModel>().ReverseMap();
             CreateMap<Model, ModelViewModel>().ReverseMap();
-
+            CreateMap<BillingAddress, BillingAddressModelView>().ReverseMap();
 
             //  CreateMap<Cart, CartViewModel>().ReverseMap();
             CreateMap<Wishlist, WishlistViewModel>().ReverseMap();

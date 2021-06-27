@@ -9,10 +9,11 @@ namespace BL.ViewModel
     public class BillingAddressModelView
     {
         public int ID { get; set; }
+     
         public string street { get; set; }
         public string Phone { get; set; }
         public string ApplicationUserIdentity_Id { get; set; }
         public string ShipperName { get; set; }
-        public int PaymentID { get; set; }
+       // public int PaymentID { get; set; }
     }
 }

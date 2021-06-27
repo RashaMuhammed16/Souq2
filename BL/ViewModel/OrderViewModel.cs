@@ -12,7 +12,7 @@ namespace BL.ViewModel
   public  class OrderViewModel
     {
 
-        public int OrderId { get; set; }
+        public int Id { get; set; }
         [Required]
         public int OrderNumber { get; set; }
         public int paymentId { get; set; }

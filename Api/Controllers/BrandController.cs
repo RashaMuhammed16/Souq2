@@ -1,5 +1,6 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+  
     public class BrandController : ControllerBase
     { 
         BrandAppService _brandAppService;
@@ -20,6 +22,7 @@ namespace Api.Controllers
            
         }
         [HttpGet]
+
         public IActionResult GetAllBrands()
         {
             return Ok(_brandAppService.GetAllBrand());

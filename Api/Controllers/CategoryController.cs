@@ -1,5 +1,6 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,8 +12,10 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+ 
     public class CategoryController : ControllerBase
     {
+       // private const object UserRolse;
         CategoryAppService _categoryAppService;
 
         public CategoryController(CategoryAppService categoryAppService)
@@ -31,6 +34,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
+     
         public IActionResult Create(CategoryViewModel categoryViewModel)
         {
 
@@ -54,6 +58,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
+      
         public IActionResult Edit(int id, CategoryViewModel categoryViewModel)
         {
 
@@ -73,6 +78,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        
         public IActionResult Delete(int id)
         {
             try

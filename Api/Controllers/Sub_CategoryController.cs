@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
@@ -35,6 +36,7 @@ namespace Api.Controllers
             return Ok(sub_CategortAppService.GetAllsubCategoryWhere(id));
         }
         [HttpPost]
+     
         public IActionResult Create(Sub_CategoryViewModel subcategoryViewModel)
         {
 
@@ -77,6 +79,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("{id}")]
+      
         public IActionResult Delete(int id)
         {
             

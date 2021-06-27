@@ -113,6 +113,9 @@ namespace DataAccessLayer.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApplicationUserIdentity_Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -121,15 +124,15 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ShipperName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("appUserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("city")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("street")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("ApplicationUserIdentity_Id");
 
                     b.ToTable("billingAddresses");
                 });
@@ -197,7 +200,7 @@ namespace DataAccessLayer.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApplicationUserIdentity_Id")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
@@ -205,20 +208,12 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Orderdate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShipoperIDID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("appUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<double>("totalPrice")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ShipoperIDID");
-
-                    b.HasIndex("appUserId");
+                    b.HasIndex("ApplicationUserIdentity_Id");
 
                     b.ToTable("Orders");
                 });
@@ -261,9 +256,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ApplicationUserIdentity_Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("BillingAddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CardNumber")
                         .IsRequired()
                         .HasMaxLength(16)
@@ -284,8 +276,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("ApplicationUserIdentity_Id");
-
-                    b.HasIndex("BillingAddressId");
 
                     b.ToTable("Payment");
                 });
@@ -581,7 +571,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("DataAccessLayer.ApplicationUserIdentity", "appUser")
                         .WithMany()
-                        .HasForeignKey("appUserId");
+                        .HasForeignKey("ApplicationUserIdentity_Id");
 
                     b.Navigation("appUser");
                 });
@@ -599,17 +589,11 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Order", b =>
                 {
-                    b.HasOne("DataAccessLayer.Models.Shipper", "ShipoperID")
-                        .WithMany()
-                        .HasForeignKey("ShipoperIDID");
-
                     b.HasOne("DataAccessLayer.ApplicationUserIdentity", "appUser")
                         .WithMany()
-                        .HasForeignKey("appUserId");
+                        .HasForeignKey("ApplicationUserIdentity_Id");
 
                     b.Navigation("appUser");
-
-                    b.Navigation("ShipoperID");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.OrderDetails", b =>
@@ -637,15 +621,7 @@ namespace DataAccessLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserIdentity_Id");
 
-                    b.HasOne("DataAccessLayer.Models.BillingAddress", "BillingAddress")
-                        .WithMany("Payment")
-                        .HasForeignKey("BillingAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ApplicationUserIdentity");
-
-                    b.Navigation("BillingAddress");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Product", b =>
@@ -704,7 +680,7 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.Shipper", b =>
                 {
                     b.HasOne("DataAccessLayer.Models.BillingAddress", "BillingAddress")
-                        .WithMany("Shippers")
+                        .WithMany()
                         .HasForeignKey("BillingAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -783,13 +759,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Models.BillingAddress", b =>
-                {
-                    b.Navigation("Payment");
-
-                    b.Navigation("Shippers");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Brand", b =>

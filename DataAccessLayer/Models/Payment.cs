@@ -33,8 +33,6 @@ namespace DataAccessLayer.Models
         [ForeignKey("ApplicationUserIdentity")]
         public string ApplicationUserIdentity_Id { get; set; }
         public ApplicationUserIdentity ApplicationUserIdentity { get; set; }
-        [ForeignKey("BillingAddress")]
-        public int BillingAddressId { get; set; }
-        public BillingAddress BillingAddress { get; set; }
+    
     }
 }

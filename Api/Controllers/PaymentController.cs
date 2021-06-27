@@ -1,5 +1,6 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PaymentController : ControllerBase
     {
         private PaymentAppService _paymentAppService;
@@ -32,14 +34,23 @@ namespace Api.Controllers
         public IActionResult Create(PaymentViewModel paymentViewModel)
         {
             var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            paymentViewModel.ApplicationUserIdentity_Id = userID;
+            paymentViewModel.ApplicationUserIdentity_Id =  userID;
             var payments = _paymentAppService.GetAllPayments();
             if (ModelState.IsValid == false)
                 return BadRequest(ModelState);
+            try
+            {
+                _paymentAppService.SaveNewPayment(paymentViewModel);
 
-            _paymentAppService.SaveNewPayment(paymentViewModel);
+                return Created("Createed", paymentViewModel);
 
-            return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+
         }
 
 

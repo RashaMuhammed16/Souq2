@@ -1,5 +1,6 @@
 ﻿using BL.AppServices;
 using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+ 
     public class RateController : ControllerBase
     {
         RateAppService rateAppService;

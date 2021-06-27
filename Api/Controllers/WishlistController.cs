@@ -1,5 +1,6 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WishlistController : ControllerBase
     {
         ProductWishListAppService _productWishListAppService;
@@ -35,10 +37,7 @@ namespace Api.Controllers
             //get all products in specfic wishlist
             //firs get cart id of logged user
             var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            //var userID = "88d2bf8e-a1ec-41ee-a0da-22d9e25ca54b";
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var wishListID = _wishlistAppService.GetAllWishlists().Where(w => w.ID == userID)
-            //                                               .Select(w => w.ID).FirstOrDefault();
+                                                   
             var productIDs = _productWishListAppService.GetAllProductWishList().Where(w => w.wishlistId == userID).Select(wpr => wpr.productId);
             List<ProductViewModel> productViewModels = new List<ProductViewModel>();
             foreach (var proID in productIDs)

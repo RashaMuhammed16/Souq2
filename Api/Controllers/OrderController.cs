@@ -1,5 +1,6 @@
 ﻿using BL.AppServices;
 using BL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         ProductAppService _productAppService;
@@ -34,7 +36,8 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult makeOrder(OrderDetailsViewModel ordeDetailsrViewModel)//, double totalOrderPrice)
+       // [Authorize(Roles = "Admin")]
+        public IActionResult makeOrder(OrderViewModel ordeDetailsrViewModel)//, double totalOrderPrice)
         {
 
             //get cart id of current logged user
@@ -49,7 +52,7 @@ namespace Api.Controllers
 
             };
             _orderAppService.SaveNewOrder(orderViewModel);
-            var lastOrder = _orderAppService.GetAllOrder().Select(o => o.OrderId).LastOrDefault();
+            var lastOrder = _orderAppService.GetAllOrder().Select(o => o.Id).LastOrDefault();
 
             //get know details of each product
             

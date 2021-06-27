@@ -67,6 +67,11 @@ namespace BL.AppServices
             return result;
         }
 
+        public void SaveNewWishlist(WishlistViewModel wishlistViewModel)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }
