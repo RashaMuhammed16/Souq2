@@ -28,7 +28,7 @@ namespace BL.Repositories
            
             return GetFirstOrDefault(acc => acc.Id == id);
         }
-       public List<ApplicationUserIdentity> GetAll()
+       public List<ApplicationUserIdentity> GetAllusers()
         {
             return GetAll().ToList();
         }

@@ -87,11 +87,11 @@ namespace Api.Controllers
             ApplicationUserIdentity identityUser = await _accountAppService.Find(model.Email, model.PasswordHash);
             #region oldCreateCartWishlist
             ////////create cart for new user
-            //////CartViewModel cartViewModel = new CartViewModel() { ApplicationUserIdentity_Id = identityUser.Id };
+            //////CartViewModel cartViewModel = new CartViewModel() ;//{ ApplicationUserIdentity_Id = identityUser.Id };
             //////_cartAppService.SaveNewCart(cartViewModel);
 
            WishlistViewModel wishlistViewModel = new WishlistViewModel() { ID= identityUser.Id };
-            _wishlistAppService.SaveNewWishlist(wishlistViewModel);
+           _wishlistAppService.SaveNewWishlist(wishlistViewModel);
             #endregion
             //////create roles
              // await _roleAppService.CreateRoles();

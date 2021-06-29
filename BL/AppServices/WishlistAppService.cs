@@ -32,19 +32,19 @@ namespace BL.AppServices
 
 
 
-        //public bool SaveNewWishlist(WishlistViewModel wishlistViewModel)
-        //{
-        //    if (wishlistViewModel == null)
-        //        throw new ArgumentNullException();
+        public bool SaveNewWishlist(WishlistViewModel wishlistViewModel)
+        {
+            if (wishlistViewModel == null)
+                throw new ArgumentNullException();
 
-        //    bool result = false;
-        //    var wishlist = Mapper.Map<Wishlist>(wishlistViewModel);
-        //    if (TheUnitOfWork.Wishlist.Insert(wishlist))
-        //    {
-        //        result = TheUnitOfWork.Commit() > new int();
-        //    }
-        //    return result;
-        //}
+            bool result = false;
+            var wishlist = Mapper.Map<Wishlist>(wishlistViewModel);
+            if (TheUnitOfWork.wishListRepository.Insert(wishlist))
+            {
+                result = TheUnitOfWork.Commit() > new int();
+            }
+            return result;
+        }
         public bool CreateUserWishlist(string userId)
         {
             bool result = false;
@@ -67,10 +67,10 @@ namespace BL.AppServices
             return result;
         }
 
-        public void SaveNewWishlist(WishlistViewModel wishlistViewModel)
-        {
-            throw new NotImplementedException();
-        }
+        //public void SaveNewWishlist(WishlistViewModel wishlistViewModel)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         #endregion
     }

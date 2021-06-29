@@ -32,10 +32,27 @@ namespace BL.AppServices
             this.wishlistAppService = wishlistAppService;
             
         }
-
+        public async Task CreateFirstAdmin()
+        {
+            var firstAdmin = new UserViewModel()
+            {
+                Id = null,
+                Email = "alaa@gmail.com",
+                FirstName = "alaa",
+                //  LastName = "user",
+                UserName = "Alaa",
+                PasswordHash = "@Admin12345",
+                //   BirthDate = DateTime.Now,
+                //  isDeleted = false
+            };
+            Register(firstAdmin).Wait();
+            ApplicationUserIdentity foundedAdmin = await FindByEmail(firstAdmin.Email);
+            if (foundedAdmin != null)
+                AssignRole(foundedAdmin.Id, UserRoles.Admin).Wait();
+        }
         public List<UserViewModel> GetAllAccounts()
         {
-            return Mapper.Map<List<UserViewModel>>(TheUnitOfWork.Account.GetAll().Where(ac => ac.isDeleted == false).ToList());
+            return Mapper.Map<List<UserViewModel>>(TheUnitOfWork.Account.GetAllusers().Where(ac => ac.isDeleted == false).ToList());
         }
         public UserViewModel GetAccountById(string id)
         {

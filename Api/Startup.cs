@@ -151,7 +151,7 @@ namespace Api
             // create custom roles 
             roleAppService.CreateRoles().Wait();
             // add custom first admin
-            //accountAppService.CreateFirstAdmin().Wait();
+            accountAppService.CreateFirstAdmin().Wait();
         }
 
 

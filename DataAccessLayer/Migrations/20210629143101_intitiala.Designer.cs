@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210627015013_dd")]
-    partial class dd
+    [Migration("20210629143101_intitiala")]
+    partial class intitiala
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -117,16 +117,10 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ApplicationUserIdentity_Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShipperName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("street")
@@ -166,6 +160,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("image")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -258,6 +255,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ApplicationUserIdentity_Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("BillingAddressID")
+                        .HasColumnType("int");
+
                     b.Property<string>("CardNumber")
                         .IsRequired()
                         .HasMaxLength(16)
@@ -278,6 +278,8 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("ApplicationUserIdentity_Id");
+
+                    b.HasIndex("BillingAddressID");
 
                     b.ToTable("Payment");
                 });
@@ -419,6 +421,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("image")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -623,6 +628,10 @@ namespace DataAccessLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserIdentity_Id");
 
+                    b.HasOne("DataAccessLayer.Models.BillingAddress", null)
+                        .WithMany("Payment")
+                        .HasForeignKey("BillingAddressID");
+
                     b.Navigation("ApplicationUserIdentity");
                 });
 
@@ -761,6 +770,11 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.BillingAddress", b =>
+                {
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Brand", b =>

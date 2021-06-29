@@ -46,6 +46,13 @@ namespace Api.Controllers
         {
             return Ok(_productAppService.GetRandomRelatedProducts(categoryId, numberOfProducts));
         }
+
+
+        [HttpGet("GetAllWith/{scategoryId}/")]
+        public IActionResult GetproductsOfCategory(int scategoryId)
+        {
+            return Ok(_productAppService.GetAllProductWhere(scategoryId));
+        }
         [HttpGet("subcategory/{subcatId}/{pageSize}/{pageNumber}")]
         public IActionResult GetProductsBySubCategoryIdPagination(int catId, int pageSize, int pageNumber)
         {

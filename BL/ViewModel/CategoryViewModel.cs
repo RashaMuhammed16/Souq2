@@ -10,7 +10,9 @@ namespace BL.ViewModel
         public int ID { get; set; }
         [Required]
         public string Name { get; set; }
+        public string image { get; set; }
         public string Description { get; set; }
+        
        // public string CategoryImage { get; set; }
     }
 }

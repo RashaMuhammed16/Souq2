@@ -15,7 +15,8 @@ namespace BL.ViewModel
         public string Description { get; set; }
         
         public int CatogeryId { get; set; }
-       // public Category Category { get; set; }
+        public string image { get; set; }
+        // public Category Category { get; set; }
         //  public List<Product> Products { get; set; } = new List<Product>();
     }
 }

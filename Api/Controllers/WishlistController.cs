@@ -13,7 +13,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class WishlistController : ControllerBase
     {
         ProductWishListAppService _productWishListAppService;

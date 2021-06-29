@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class dd : Migration
+    public partial class intitiala : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -73,7 +73,8 @@ namespace DataAccessLayer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -192,8 +193,6 @@ namespace DataAccessLayer.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    city = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     street = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShipperName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -226,29 +225,6 @@ namespace DataAccessLayer.Migrations
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Orders_AspNetUsers_ApplicationUserIdentity_Id",
-                        column: x => x.ApplicationUserIdentity_Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Payment",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CardNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
-                    ExperationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    cardOwnerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    cvc = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    ApplicationUserIdentity_Id = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payment", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Payment_AspNetUsers_ApplicationUserIdentity_Id",
                         column: x => x.ApplicationUserIdentity_Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -299,6 +275,7 @@ namespace DataAccessLayer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CatogeryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -311,6 +288,36 @@ namespace DataAccessLayer.Migrations
                         principalTable: "Category",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payment",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CardNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    ExperationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    cardOwnerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    cvc = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
+                    ApplicationUserIdentity_Id = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    BillingAddressID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payment", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Payment_AspNetUsers_ApplicationUserIdentity_Id",
+                        column: x => x.ApplicationUserIdentity_Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Payment_billingAddresses_BillingAddressID",
+                        column: x => x.BillingAddressID,
+                        principalTable: "billingAddresses",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -518,6 +525,11 @@ namespace DataAccessLayer.Migrations
                 name: "IX_Payment_ApplicationUserIdentity_Id",
                 table: "Payment",
                 column: "ApplicationUserIdentity_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_BillingAddressID",
+                table: "Payment",
+                column: "BillingAddressID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_Model_Id",

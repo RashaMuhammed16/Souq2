@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Models
 {
-     public class Sub_Catogery
+    public class Sub_Catogery
     {
         public int ID { get; set; }
         [Required]
         [MinLength(10)]
         public string Name { get; set; }
-        [Required]
+     public string image { get; set; }
+    [Required]
         [MinLength(10)]
         public string Description  { get; set; }
+
         [ForeignKey("Category")]
         public int CatogeryId { get; set; }
         public Category Category { get; set; }
